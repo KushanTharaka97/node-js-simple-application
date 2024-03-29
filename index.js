@@ -1,22 +1,19 @@
 const express = require("express");
-
+const controller = require("./controller");
 var expressLayouts = require("express-ejs-layouts");
-
+const db = require('./db');
 var app = express();
 
 app.set("view engine", "ejs");
-
+db.connect();
 app.use(expressLayouts);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.get("/", controller.listUser);
 
-app.get("/", (req, res) => {
-//   res.render("index");
-  res.render("index");
-});
+app.get("/add", controller.addUser);
 
-app.get("/add", (req, res)=>{
-    console.log("adding people");
-    res.render("add");
-})
+app.post("/create-user", controller.createUser);
 
 app.listen(3001, () => {
   console.log("App is running on the port: 3001");
